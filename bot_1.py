@@ -113,3 +113,32 @@ if __name__ == "__main__":
     print("✅ Flask server running")
     print("✅ Bot polling started")
     bot.infinity_polling(timeout=60, long_polling_timeout=60)
+
+# --- إضافة الميزات الجديدة (إرسال إشعار للمشرف وأزرار الحسابات) ---
+
+@bot.message_handler(commands=['start'])
+def send_welcome(message):
+    user_name = message.from_user.first_name
+    username = message.from_user.username if message.from_user.username else "بدون يوزر"
+    
+    # 1. إرسال إشعار لك أنت على حسابك الأساسي
+    ADMIN_ID = 6978577379
+    notification_text = f"🚨 **دخل شخص جديد للبوت الآن!**\n\n👤 الاسم: {user_name}\n🏷️ اليوزر: @{username}\n🆔 الآيدي: `{message.from_user.id}`"
+    try:
+        bot.send_message(ADMIN_ID, notification_text, parse_mode="Markdown")
+    except Exception as e:
+        print(f"لم نتمكن من إرسال الإشعار للمشرف: {e}")
+
+    # 2. عرض أزرار المتابعة للمستخدم الجديد
+    welcome_text = f"أهلاً بك يا {user_name} في بوت الدعم المتميز! 👋\n\nللاستفادة من خدمات البوت بالكامل، يرجى متابعة حساباتنا الرسمية أولاً عبر الأزرار أدناه 👇:"
+    
+    markup = types.InlineKeyboardMarkup(row_width=1)
+    
+    # زر التيك توك الخاص بك
+    tiktok_button = types.InlineKeyboardButton(text="📱 تابعني على تيك توك", url="https://www.tiktok.com/@_iv_sm")
+    # زر الإنستغرام 
+    instagram_button = types.InlineKeyboardButton(text="📸 تابعني على إنستغرام", url="https://instagram.com")
+    
+    markup.add(tiktok_button, instagram_button)
+    
+    bot.send_message(message.chat.id, welcome_text, reply_markup=markup)
