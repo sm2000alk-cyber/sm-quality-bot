@@ -115,9 +115,8 @@ if __name__ == "__main__":
     bot.infinity_polling(timeout=60, long_polling_timeout=60)
 
 
-# --- كود مخصص لعرض حساب التيك توك والإشعارات بنجاح دون التأثير على ما سبق ---
-
-@bot.message_handler(func=lambda message: message.text and message.text.startswith('/follow'))
+# --- كود التيك توك والإشعارات الجديد (في الأعلى ليعمل بنجاح) ---
+@bot.message_handler(commands=['follow'])
 def custom_social_handler(message):
     user_name = message.from_user.first_name
     username = message.from_user.username if message.from_user.username else "بدون يوزر"
@@ -128,18 +127,15 @@ def custom_social_handler(message):
     try:
         bot.send_message(ADMIN_ID, notification_text, parse_mode="Markdown")
     except Exception as e:
-        print(f"لم نتمكن من إرسال الإشعار للمشرف: {e}")
+        print(f"لم نتمكن من إرسال الإشعار: {e}")
 
     # 2. عرض أزرار المتابعة الرسمية للمستخدم
     welcome_text = f"أهلاً بك يا {user_name} ✨\n\nيرجى متابعة حساباتنا الرسمية عبر الأزرار أدناه 👇:"
     
-    markup = types.InlineKeyboardMarkup(row_width=1)
-    
-    # زر التيك توك الخاص بك
-    tiktok_button = types.InlineKeyboardButton(text="📱 تابعني على تيك توك", url="https://www.tiktok.com/@_iv_sm")
-    # زر الإنستغرام الخاص بك
-    instagram_button = types.InlineKeyboardButton(text="📸 تابعني على إنستغرام", url="https://instagram.com/sm__quality")
+    markup = telebot.types.InlineKeyboardMarkup(row_width=1)
+    tiktok_button = telebot.types.InlineKeyboardButton(text="📱 تابعني على تيك توك", url="https://www.tiktok.com/@_iv_sm")
+    instagram_button = telebot.types.InlineKeyboardButton(text="📸 تابعني على إنستغرام", url="https://instagram.com/sm__quality")
     
     markup.add(tiktok_button, instagram_button)
-    
     bot.send_message(message.chat.id, welcome_text, reply_markup=markup)
+# -------------------------------------------------------------
