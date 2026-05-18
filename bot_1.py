@@ -13,7 +13,7 @@ import os
 #  إعدادات البوت — لا تضع التوكن هنا
 #  ضعه في متغيرات البيئة على Render
 # ══════════════════════════════════════
-BOT_TOKEN      = os.environ.get("BOT_TOKEN", "YOUR_TOKEN_HERE")
+BOT_TOKEN      = os.environ.get("8634912764:AAFHRGDml2jK-sABMkhLWEV9Ax-HIPdDYTg")
 ADMIN_CHAT_ID  = int(os.environ.get("ADMIN_CHAT_ID", "6978577379"))
 
 INSTAGRAM_USERNAME = "sm___quality"
@@ -114,30 +114,31 @@ if __name__ == "__main__":
     print("✅ Bot polling started")
     bot.infinity_polling(timeout=60, long_polling_timeout=60)
 
-# --- إضافة الميزات الجديدة (إرسال إشعار للمشرف وأزرار الحسابات) ---
 
-@bot.message_handler(commands=['start'])
-def send_welcome(message):
+ # --- إضافة الميزات الجديدة بأمر منفصل لتجنب التعارض مع كودك القديم ---
+
+@bot.message_handler(commands=['follow'])
+def send_social_links(message):
     user_name = message.from_user.first_name
     username = message.from_user.username if message.from_user.username else "بدون يوزر"
     
     # 1. إرسال إشعار لك أنت على حسابك الأساسي
     ADMIN_ID = 6978577379
-    notification_text = f"🚨 **دخل شخص جديد للبوت الآن!**\n\n👤 الاسم: {user_name}\n🏷️ اليوزر: @{username}\n🆔 الآيدي: `{message.from_user.id}`"
+    notification_text = f"🚨 **هناك شخص طلب حسابات التواصل الآن!**\n\n👤 الاسم: {user_name}\n🏷️ اليوزر: @{username}\n🆔 الآيدي: `{message.from_user.id}`"
     try:
         bot.send_message(ADMIN_ID, notification_text, parse_mode="Markdown")
     except Exception as e:
         print(f"لم نتمكن من إرسال الإشعار للمشرف: {e}")
 
-    # 2. عرض أزرار المتابعة للمستخدم الجديد
-    welcome_text = f"أهلاً بك يا {user_name} في بوت الدعم المتميز! 👋\n\nللاستفادة من خدمات البوت بالكامل، يرجى متابعة حساباتنا الرسمية أولاً عبر الأزرار أدناه 👇:"
+    # 2. عرض أزرار المتابعة للمستخدم
+    welcome_text = f"أهلاً بك يا {user_name} ✨\n\nيرجى متابعة حساباتنا الرسمية عبر الأزرار أدناه 👇:"
     
     markup = types.InlineKeyboardMarkup(row_width=1)
     
     # زر التيك توك الخاص بك
     tiktok_button = types.InlineKeyboardButton(text="📱 تابعني على تيك توك", url="https://www.tiktok.com/@_iv_sm")
     # زر الإنستغرام 
-    instagram_button = types.InlineKeyboardButton(text="📸 تابعني على إنستغرام", url="https://instagram.com")
+    instagram_button = types.InlineKeyboardButton(text="📸 تابعني على إنستغرام", url="https://instagram.com/sm__quality")
     
     markup.add(tiktok_button, instagram_button)
     
