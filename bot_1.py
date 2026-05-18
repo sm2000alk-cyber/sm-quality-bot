@@ -26,7 +26,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return "✅ SM Quality Bot is alive!", 200
+   return render_template("index.html")
 
 @app.route("/health")
 def health():
